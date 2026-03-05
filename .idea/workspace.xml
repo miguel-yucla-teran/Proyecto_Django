@@ -4,18 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c9e91959-cdec-4d7f-a696-eb846fce82c1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/App_Gestion_Escolar.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alumnos/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cursos/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/profesores/migrations/__init__.py" afterDir="false" />
+    <list default="true" id="c9e91959-cdec-4d7f-a696-eb846fce82c1" name="Changes" comment="Creación de entorno Django, Creación de apps alumnos, cursos y profesores">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/data_source_mapping.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/App_Gestion_Escolar/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alumnos/static/alumnos/css/estilos.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alumnos/templates/alumnos/inicio.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alumnos/templates/alumnos/lista_alumnos.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alumnos/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cursos/static/cursos/css/estilos.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cursos/templates/cursos/cursos.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cursos/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/profesores/static/profesores/css/estilos.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/profesores/templates/profesores/profesores.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/profesores/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/css/estilos.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App_Gestion_Escolar/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/App_Gestion_Escolar/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App_Gestion_Escolar/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/App_Gestion_Escolar/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alumnos/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/alumnos/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cursos/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cursos/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/profesores/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/profesores/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,34 +40,54 @@
   <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="HTML File" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="39xSpmKKqc1NRyRv4ZDlnwbZ9iX" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "ai.playground.ignore.import.keys.banner.in.settings": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Django Server.App_Gestion_Escolar.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ai.playground.ignore.import.keys.banner.in.settings&quot;: &quot;true&quot;,
+    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
+    ]
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="App_Gestion_Escolar" type="Python.DjangoServer" factoryName="Django server">
       <module name="App_Gestion_Escolar" />
@@ -66,6 +96,7 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="App_Gestion_Escolar.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="" />
@@ -100,12 +131,29 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1771636413888</updated>
-      <workItem from="1771636415059" duration="5227000" />
+      <workItem from="1771636415059" duration="11678000" />
+      <workItem from="1771894515231" duration="10643000" />
+      <workItem from="1771980931246" duration="5946000" />
+      <workItem from="1772066862607" duration="1199000" />
+      <workItem from="1772503030051" duration="4503000" />
     </task>
+    <task id="LOCAL-00001" summary="Creación de entorno Django, Creación de apps alumnos, cursos y profesores">
+      <option name="closed" value="true" />
+      <created>1771645788055</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1771645788056</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Creación de entorno Django, Creación de apps alumnos, cursos y profesores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Creación de entorno Django, Creación de apps alumnos, cursos y profesores" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
