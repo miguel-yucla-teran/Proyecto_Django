@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name = "viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Profesores</title>
+    <link rel = "stylesheet" href="{% static 'alumnos/css/estilos.css' %}">
+</head>
+<body>
+    <main>
+        <h1>Liceo Digital - Portal de Profesores</h1>
+        <p>Entraste a una App (Módulo) de tu Liceo Digital</p>
+        <h2>Listado de Profesores</h2>
+        <p>Acá va el listado de profesores:</p>
+        <!-- Contenido generado dinámicamente = Diccionario (contexto) -->
+        {% if lista_profesores %}
+            <p>¡Excelente! Tenemos los siguientes profesores inscritos</p>
+            <ol>
+                {% for profesor in lista_profesores %}
+                    <li>{{ profesor }}</li>
+                {% endfor %}
+            </ol>
+        {% else %}
+            <p><strong>AVISO:</strong>Actualmente no hay profesores para listar</p>
+        {% endif %}
+        <!--Fin del contenido dinámico -->
+
+        <a href = "{% url 'inicio_global'%}">Volver al Portal Central</a>
+    </main>
+</body>
+</html>

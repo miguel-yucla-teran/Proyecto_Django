@@ -8,6 +8,9 @@
         <h1>Liceo Digital - Portal de Profesores</h1>
         <p>Entraste a una App (Módulo) de tu Liceo Digital.</p>
         <h2>Bienvenido a tu plataforma estudiantil</h2>
-        <p>Aquí podrás revisar tus datos personales. <em>(Estamos en la App Profesores del Proyecto Django)</em>.</p>
-
+        <p>Aquí podrás revisar tus datos personales. <em>(Estamos en la App Alumnos del Proyecto Django)</em>.</p>
+        {% block header %}
+        <a href = "{% url 'lista_profesores' %}">Listado Profesores</a>
+        <a href = "{% url 'registro_profesor' %}">Registro Profesor</a>
+        {% endblock %}
 {% endblock %}

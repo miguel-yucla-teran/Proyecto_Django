@@ -9,5 +9,8 @@
         <p>Entraste a una App (Módulo) de tu Liceo Digital.</p>
         <h2>Bienvenido a tu plataforma estudiantil</h2>
         <p>Aquí podrás revisar tus datos personales. <em>(Estamos en la App Alumnos del Proyecto Django)</em>.</p>
-
+        {% block header %}
+        <a href = "{% url 'lista_alumnos' %}">Listado Alumnos</a>
+        <a href = "{% url 'registro_alumno' %}">Registro Alumno</a>
+        {% endblock %}
 {% endblock %}

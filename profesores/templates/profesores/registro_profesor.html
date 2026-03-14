@@ -1,0 +1,22 @@
+<!-- DTL - Django Templates Language (Python minimizada) -->
+{% extends 'index.html' %}
+
+{% block titulo %} Registro de Profesor {% endblock %}
+
+{% block contenido %}
+
+        <h1>Registrar un Nuevo Profesor</h1>
+        <form method = "POST">
+            {% csrf_token %}
+
+            <div>
+                {{ form.as_p }}
+            </div>
+            <div>
+                <button type = "submit">
+                    Registrar Profesor
+                </button>
+            </div>
+        </form>
+
+{% endblock %}
