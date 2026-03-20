@@ -1,32 +1,24 @@
+{% extends "index.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name = "viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal de Cursos</title>
-    <link rel = "stylesheet" href="{% static 'cursos/css/estilos.css' %}">
-</head>
-<body>
-    <main>
-        <h1>Liceo Digital - Cursos</h1>
-        <p>Entraste a una App (Módulo) de tu Liceo Digital</p>
-        <h2>Listado  de Cursos</h2>
-        <p>Acá va el listado de cursos:</p>
-        <!-- Contenido generado dinámicamente = Diccionario (contexto) -->
-        {% if lista_cursos %}
-            <p>¡Excelente! Tenemos los siguientes cursos inscritos</p>
-            <ol>
-                {% for curso in lista_cursos %}
-                    <li>{{ curso }}</li>
-                {% endfor %}
-            </ol>
-        {% else %}
-            <p><strong>AVISO:</strong>Actualmente no hay cursos para listar</p>
-        {% endif %}
-        <!--Fin del contenido dinámico -->
 
-        <a href = "{% url 'inicio_global'%}">Volver al Portal Central</a>
-    </main>
-</body>
-</html>
+{% block titulo %}Portal de Cursos{% endblock %}
+
+{% block contenido %}
+    <h1>Liceo Digital - Portal de Cursos</h1>
+    <p>Entraste a una App (Módulo) de tu Liceo Digital</p>
+    <h2>Listado de Cursos</h2>
+    <p>Acá va el listado de cursos:</p>
+
+    {% if lista_cursos %}
+        <p>¡Excelente! Tenemos los siguientes cursos inscritos</p>
+        <ol>
+            {% for curso in lista_cursos %}
+                <li>{{ curso }}</li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p><strong>AVISO:</strong> Actualmente no hay cursos para listar</p>
+    {% endif %}
+
+    <a href="{% url 'inicio_global' %}">Volver al Portal Central</a>
+{% endblock %}

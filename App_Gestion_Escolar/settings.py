@@ -78,12 +78,8 @@ WSGI_APPLICATION = "App_Gestion_Escolar.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "mysql.connector.django",
-        "NAME": "gestion_escolar_DB",
-        "USER": "root",
-        "PASSWORD": "admin123",
-        "HOST": "localhost",
-        "PORT": "3306",
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -124,3 +120,17 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
+#CONFIGURAR LA AUTENTICACION
+
+#GPS del éxito: Hacia donde llevará la App alusuario logueado exitosamente
+
+LOGIN_REDIRECT_URL = '/'
+
+#GPS en caso de fracaso: Hacia donde llevará la App al usuario que no se logueó exitosamente
+
+LOGOUT_REDIRECT_URL = '/login/'
+
+#La nueva ubicación del archivo login.html (por defecto debería estar en una carpeta app/registro/login.html
+
+LOGIN_URL = 'login'

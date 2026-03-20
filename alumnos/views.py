@@ -1,17 +1,19 @@
 from django.shortcuts import render
 from .import forms
-
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required()
 def portal_alumnos(request):
     return render(request, "alumnos/inicio.html")
 
+@login_required
 def lista_alumnos(request):
     alumnos = ["Chuck Norris", "Bruce Lee", "Jet Li", "Jackie Chan"]
     contexto = {'lista_alumnos': alumnos
                 }
     return render(request, "alumnos/lista_alumnos.html", contexto)
-
+@login_required
 def nuevo_alumno(request):
     if request.method == 'GET':
         #Acá llegaria cuando la persona apretó el boton de la barra de navegación, buscando el link
