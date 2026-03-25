@@ -1,8 +1,17 @@
 from django import forms
+from .models import Curso
 
-class CursoForm(forms.Form):
-    #Si es del tipo texto, debe ser Charfield
-    nombre_curso = forms.CharField(label='Nombre_curso', max_length=100)
-    codigo = forms.CharField(label='Codigo', max_length=100)
-    descripcion = forms.CharField(label='Descripcion', widget=forms.Textarea,required=False  )
-    profesor = forms.CharField(label='Profesor', max_length=100)
+class CursoForm(forms.ModelForm):
+    class Meta:
+        model = Curso
+        fields = ['nombre', 'profesor', 'alumnos']
+        labels = {
+            'nombre': 'Nombre del Curso',
+            'profesor': 'Profesor Asignado',
+            'alumnos': 'Alumnos del Curso',
+        }
+        widgets = {
+            'nombre': forms.TextInput(attrs={'placeholder': 'Ej: Matemáticas 1°A'}),
+            'profesor': forms.Select(),
+            'alumnos': forms.CheckboxSelectMultiple(),
+        }

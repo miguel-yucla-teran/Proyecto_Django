@@ -1,24 +1,171 @@
-{% extends "index.html" %}
-{% load static %}
+{% extends 'base.html' %}
 
-{% block titulo %}Portal de Alumnos{% endblock %}
+{% block titulo %} Listado de Alumnos {% endblock %}
 
-{% block contenido %}
-    <h1>Liceo Digital - Portal de Alumnos</h1>
-    <p>Entraste a una App (Módulo) de tu Liceo Digital</p>
-    <h2>Listado de Alumnos</h2>
-    <p>Acá va el listado de alumnos:</p>
+{% block main %}
 
-    {% if lista_alumnos %}
-        <p>¡Excelente! Tenemos los siguientes alumnos inscritos</p>
-        <ol>
-            {% for alumno in lista_alumnos %}
-                <li>{{ alumno }}</li>
-            {% endfor %}
-        </ol>
-    {% else %}
-        <p><strong>AVISO:</strong> Actualmente no hay alumnos para listar</p>
-    {% endif %}
+<!-- Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+    <div>
+        <!-- Breadcrumb -->
+        <nav class="flex items-center gap-2 text-xs font-medium text-slate-400 mb-2 uppercase tracking-wide">
+            <a class="hover:text-primary" href="{% url 'base' %}">Inicio</a>
+            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+            <span class="text-slate-600 dark:text-slate-300">Alumnos</span>
+        </nav>
+        <div class="flex items-center gap-3">
+            <div class="size-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/20">
+                <span class="material-symbols-outlined">group</span>
+            </div>
+            <div>
+                <h1 class="text-2xl font-black text-slate-900 dark:text-white">Listado de Alumnos</h1>
+                <p class="text-slate-500 dark:text-slate-400 text-sm">
+                    {% if lista_alumnos %}
+                        {{ lista_alumnos|length }} alumno{{ lista_alumnos|length|pluralize:"s" }} registrado{{ lista_alumnos|length|pluralize:"s" }}
+                    {% else %}
+                        Sin registros aún
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    <a href="{% url 'agregar_alumno' %}"
+       class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white
+              font-bold py-2.5 px-5 rounded-xl shadow-lg shadow-primary/20 transition-all self-start sm:self-auto">
+        <span class="material-symbols-outlined text-[20px]">person_add</span>
+        Nuevo Alumno
+    </a>
+</div>
 
-    <a href="{% url 'inicio_global' %}">Volver al Portal Central</a>
+{% if lista_alumnos %}
+
+    <!-- Tabla -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+
+        <!-- Buscador simple -->
+        <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3">
+            <span class="material-symbols-outlined text-slate-400">search</span>
+            <input type="text"
+                   id="buscador"
+                   placeholder="Buscar por nombre, apellido o RUT..."
+                   onkeyup="filtrarTabla()"
+                   class="w-full bg-transparent text-sm text-slate-700 dark:text-slate-300
+                          placeholder-slate-400 focus:outline-none">
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-100 dark:divide-slate-800" id="tablaAlumnos">
+                <thead class="bg-slate-50 dark:bg-slate-800/50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">RUT</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nombre Completo</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Fecha Nacimiento</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                    {% for alumno in lista_alumnos %}
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+
+                        <!-- RUT -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1.5 text-sm font-mono font-semibold text-slate-700 dark:text-slate-300">
+                                <span class="material-symbols-outlined text-[15px] text-primary">badge</span>
+                                {{ alumno.rut }}
+                            </span>
+                        </td>
+
+                        <!-- Nombre completo -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center gap-3">
+                                <div class="size-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                                    <span class="text-primary text-sm font-bold">
+                                        {{ alumno.nombre|first|upper }}{{ alumno.apellido|first|upper }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-slate-900 dark:text-white">
+                                        {{ alumno.nombre }} {{ alumno.apellido }}
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Fecha de nacimiento -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-[15px]">calendar_today</span>
+                                {{ alumno.fecha_nacimiento|date:"d/m/Y" }}
+                            </span>
+                        </td>
+
+                        <!-- Acciones -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center gap-2">
+                                <a href="{% url 'detalle_alumno' alumno.rut %}"
+                                        title="Ver detalle"
+                                        class="p-1.5 rounded-lg text-slate-400 hover:text-primary hover:bg-primary/10 transition-all">
+                                    <span class="material-symbols-outlined text-[18px]">visibility</span>
+                                </a>
+                                <a href="{% url 'editar_alumno' alumno.rut %}"
+                                        title="Editar"
+                                        class="p-1.5 rounded-lg text-slate-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-all">
+                                    <span class="material-symbols-outlined text-[18px]">edit</span>
+                                </a>
+                                <a href="{% url 'eliminar_alumno' alumno.rut %}"
+                                        title="Eliminar"
+                                        class="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all">
+                                    <span class="material-symbols-outlined text-[18px]">delete</span>
+                                </a>
+                            </div>
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer de tabla -->
+        <div class="px-6 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20">
+            <p class="text-xs text-slate-400">
+                Total: <span class="font-bold text-slate-600 dark:text-slate-300">{{ lista_alumnos|length }}</span> alumno{{ lista_alumnos|length|pluralize:"s" }}
+            </p>
+        </div>
+
+    </div>
+
+{% else %}
+
+    <!-- Estado vacío -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-16 flex flex-col items-center text-center gap-4">
+        <div class="size-20 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+            <span class="material-symbols-outlined text-slate-400 text-4xl">group_off</span>
+        </div>
+        <div>
+            <h3 class="text-lg font-bold text-slate-700 dark:text-slate-300">No hay alumnos registrados</h3>
+            <p class="text-slate-400 text-sm mt-1">Comienza agregando el primer alumno al sistema.</p>
+        </div>
+        <a href="{% url 'agregar_alumno' %}"
+           class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white
+                  font-bold py-2.5 px-6 rounded-xl shadow-lg shadow-primary/20 transition-all mt-2">
+            <span class="material-symbols-outlined text-[20px]">person_add</span>
+            Agregar Primer Alumno
+        </a>
+    </div>
+
+{% endif %}
+
+<!-- Script buscador -->
+<script>
+function filtrarTabla() {
+    const input = document.getElementById('buscador').value.toLowerCase();
+    const filas = document.querySelectorAll('#tablaAlumnos tbody tr');
+    filas.forEach(fila => {
+        const texto = fila.textContent.toLowerCase();
+        fila.style.display = texto.includes(input) ? '' : 'none';
+    });
+}
+</script>
+
 {% endblock %}

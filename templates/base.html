@@ -1,0 +1,360 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>{% block titulo %}Sistema de Gestión Escolar (SGE){% endblock %}</title>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#197fe6",
+                        "navy-deep": "#0f172a",
+                        "muted-blue": "#64748b",
+                        "soft-grey": "#e2e8f0",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111921",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          rel="stylesheet"/>
+
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    <script src="{% static 'js/config.js' %}" defer></script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen flex-col">
+    <header class="sticky top-0 z-50 w-full bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-soft-grey dark:border-slate-800 px-4 md:px-10 lg:px-20 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-8">
+                <div class="flex items-center gap-3 text-primary">
+                    <div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+                        <span class="material-symbols-outlined">school</span>
+                    </div>
+                    <h1 class="text-navy-deep dark:text-white text-xl font-bold tracking-tight">Sistema de Gestión
+                        Escolar (SGE)</h1>
+                </div>
+                <nav class="md:flex items-center gap-8">
+                    <a class="text-navy-deep dark:text-slate-300 text-sm font-semibold hover:text-primary transition-colors"
+                       href="{% url 'base' %}">Inicio</a>
+                    <a class="text-muted-blue dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors"
+                       href="{% url 'portal_alumnos' %}">Alumnos</a>
+                    <a class="text-muted-blue dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors"
+                       href="{% url 'portal_cursos' %}">Cursos</a>
+                    <a class="text-muted-blue dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors"
+                       href="{% url 'portal_profesores' %}">Profesores</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="{% url 'perfil_usuario' %}"
+                   class="flex items-center gap-2.5 group
+                              px-3 py-1.5 rounded-xl
+                              hover:bg-slate-100 dark:hover:bg-slate-800
+                              transition-all duration-200">
+
+                    {# Avatar circular con iniciales #}
+                    <div class="size-8 rounded-full bg-primary
+                                    flex items-center justify-center
+                                    text-white text-xs font-black
+                                    ring-2 ring-primary/20
+                                    group-hover:ring-primary/50
+                                    transition-all duration-200 shrink-0">
+                        {{ request.user.username|first|upper }}{{ request.user.username|slice:"1:2"|upper }}
+                    </div>
+
+                    {# Nombre de usuario #}
+                    <span class="text-sm font-semibold
+                                     text-navy-deep dark:text-slate-300
+                                     group-hover:text-primary
+                                     transition-colors duration-200
+                                     hidden sm:block">
+                            {{ request.user.username }}
+                        </span>
+
+                    {# Ícono de flecha — refuerza visualmente que es un link #}
+                    <span class="material-symbols-outlined text-[16px]
+                                     text-slate-400 group-hover:text-primary
+                                     transition-colors duration-200
+                                     hidden sm:block">
+                            chevron_right
+                        </span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl mx-auto w-full px-4 md:px-10 lg:px-20 py-8">
+        {# ================================================================ #}
+        {# BLOQUE DE MENSAJES — App Messages                                #}
+        {# ================================================================ #}
+        {% if messages %}
+            <div id="messages-container" class="mb-6 space-y-3">
+                {% for message in messages %}
+                    {% if "success" in message.tags %}
+                        {# Verde — operación CRUD completada correctamente #}
+                        <div data-message
+                             class="flex items-start gap-3 px-4 py-3 rounded-xl border
+                                        bg-emerald-50 dark:bg-emerald-900/20
+                                        border-emerald-200 dark:border-emerald-800
+                                        text-emerald-800 dark:text-emerald-300">
+                            <span class="material-symbols-outlined text-[20px] shrink-0 mt-0.5">check_circle</span>
+                            <p class="text-sm font-medium">{{ message }}</p>
+                            <button onclick="this.closest('[data-message]').remove()"
+                                    class="ml-auto shrink-0 text-emerald-500 hover:text-emerald-700 transition-colors">
+                                <span class="material-symbols-outlined text-[18px]">close</span>
+                            </button>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {# Auto-dismiss: los mensajes desaparecen solos tras 5 segundos.  #}
+            {# El script se inserta solo cuando hay mensajes que mostrar,      #}
+            {# evitando código JavaScript innecesario en el resto de páginas.  #}
+            <script>
+                (function () {
+                    // Esperamos 5000ms (5 segundos) antes de iniciar el fade out
+                    setTimeout(function () {
+                        document.querySelectorAll('[data-message]').forEach(function (el) {
+                            // Transición suave: reducimos opacidad primero
+                            el.style.transition = 'opacity 0.5s ease';
+                            el.style.opacity = '0';
+                            // Después de la transición (500ms), eliminamos el nodo del DOM
+                            setTimeout(function () {
+                                el.remove();
+                            }, 500);
+                        });
+                    }, 5000);
+                })();
+            </script>
+        {% endif %}
+        {# ================================================================ #}
+        {% block main %}
+            <div class="mb-10">
+                <h2 class="text-navy-deep dark:text-white text-3xl font-extrabold tracking-tight">Panel de Control</h2>
+                <p class="text-muted-blue dark:text-slate-400 mt-2 text-lg">Bienvenido de nuevo, Admin. Aquí tienes el
+                    estado actual de la institución.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-soft-grey dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="size-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                            <span class="material-symbols-outlined">group</span>
+                        </div>
+                        <span class="text-green-500 text-xs font-bold">+2.4%</span>
+                    </div>
+                    <p class="text-muted-blue dark:text-slate-400 text-sm font-medium">Total Alumnos</p>
+                    <p class="text-navy-deep dark:text-white text-2xl font-bold mt-1">{{ total_alumnos }}</p>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-soft-grey dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="size-10 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center">
+                            <span class="material-symbols-outlined">person</span>
+                        </div>
+                        <span class="text-muted-blue text-xs font-bold">Estable</span>
+                    </div>
+                    <p class="text-muted-blue dark:text-slate-400 text-sm font-medium">Docentes Activos</p>
+                    <p class="text-navy-deep dark:text-white text-2xl font-bold mt-1">{{ total_profesores }}</p>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-soft-grey dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="size-10 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center">
+                            <span class="material-symbols-outlined">book</span>
+                        </div>
+                        <span class="text-orange-500 text-xs font-bold">Nuevo</span>
+                    </div>
+                    <p class="text-muted-blue dark:text-slate-400 text-sm font-medium">Cursos Activos</p>
+                    <p class="text-navy-deep dark:text-white text-2xl font-bold mt-1">{{ total_cursos }}</p>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-soft-grey dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="size-10 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center">
+                            <span class="material-symbols-outlined">event_note</span>
+                        </div>
+                        <span class="text-red-500 text-xs font-bold">Pendiente</span>
+                    </div>
+                    <p class="text-muted-blue dark:text-slate-400 text-sm font-medium">Avisos del Día</p>
+                    <p class="text-navy-deep dark:text-white text-2xl font-bold mt-1">5</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 space-y-8">
+                    <h3 class="text-navy-deep dark:text-white text-xl font-bold border-l-4 border-primary pl-4">Gestión
+                        de Módulos</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="group bg-white dark:bg-slate-900 p-6 rounded-xl border border-soft-grey dark:border-slate-800 hover:border-primary/50 transition-all cursor-pointer">
+                            <div class="flex items-start gap-4">
+                                <div class="size-12 rounded-xl bg-primary flex items-center justify-center text-white shrink-0 shadow-lg shadow-primary/20">
+                                    <span class="material-symbols-outlined text-2xl">person_add</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-navy-deep dark:text-white font-bold text-lg mb-1 group-hover:text-primary transition-colors">
+                                        Inscripciones</h4>
+                                    <p class="text-muted-blue dark:text-slate-400 text-sm leading-relaxed">Gestione los
+                                        nuevos ingresos de alumnos y actualización de expedientes académicos
+                                        digitales.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="group bg-white dark:bg-slate-900 p-6 rounded-xl border border-soft-grey dark:border-slate-800 hover:border-primary/50 transition-all cursor-pointer">
+                            <div class="flex items-start gap-4">
+                                <div class="size-12 rounded-xl bg-slate-800 dark:bg-primary/20 flex items-center justify-center text-white dark:text-primary shrink-0 shadow-lg">
+                                    <span class="material-symbols-outlined text-2xl">calendar_month</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-navy-deep dark:text-white font-bold text-lg mb-1 group-hover:text-primary transition-colors">
+                                        Horarios de Clases</h4>
+                                    <p class="text-muted-blue dark:text-slate-400 text-sm leading-relaxed">Organización
+                                        de calendarios por aula y profesor. Visualización de disponibilidad en tiempo
+                                        real.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="group bg-white dark:bg-slate-900 p-6 rounded-xl border border-soft-grey dark:border-slate-800 hover:border-primary/50 transition-all cursor-pointer">
+                            <div class="flex items-start gap-4">
+                                <div class="size-12 rounded-xl bg-blue-100 dark:bg-slate-800 flex items-center justify-center text-primary shrink-0">
+                                    <span class="material-symbols-outlined text-2xl">assignment</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-navy-deep dark:text-white font-bold text-lg mb-1 group-hover:text-primary transition-colors">
+                                        Calificaciones</h4>
+                                    <p class="text-muted-blue dark:text-slate-400 text-sm leading-relaxed">
+                                        Centralización de notas, reportes de evaluación y boletines de rendimiento
+                                        trimestral.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="group bg-white dark:bg-slate-900 p-6 rounded-xl border border-soft-grey dark:border-slate-800 hover:border-primary/50 transition-all cursor-pointer">
+                            <div class="flex items-start gap-4">
+                                <div class="size-12 rounded-xl bg-blue-100 dark:bg-slate-800 flex items-center justify-center text-primary shrink-0">
+                                    <span class="material-symbols-outlined text-2xl">payments</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-navy-deep dark:text-white font-bold text-lg mb-1 group-hover:text-primary transition-colors">
+                                        Pagos y Becas</h4>
+                                    <p class="text-muted-blue dark:text-slate-400 text-sm leading-relaxed">Control de
+                                        mensualidades, becas institucionales y gestión de facturación electrónica.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-8">
+                    <h3 class="text-navy-deep dark:text-white text-xl font-bold border-l-4 border-primary pl-4">Últimas
+                        Actualizaciones</h3>
+                    <div class="bg-white dark:bg-slate-900 rounded-xl border border-soft-grey dark:border-slate-800 overflow-hidden">
+                        <div class="p-4 border-b border-soft-grey dark:border-slate-800 flex items-center justify-between">
+                            <span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded">Hoy</span>
+                            <button class="text-primary text-xs font-bold hover:underline">Ver todo</button>
+                        </div>
+                        <div class="divide-y divide-soft-grey dark:divide-slate-800">
+                            <div class="p-4 flex gap-4">
+                                <div class="size-10 rounded-full bg-soft-grey dark:bg-slate-800 flex items-center justify-center shrink-0">
+                                    <span class="material-symbols-outlined text-muted-blue">mail</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-navy-deep dark:text-white">Circular: Fin de
+                                        Ciclo</p>
+                                    <p class="text-xs text-muted-blue mt-0.5">Enviada a 450 padres de familia.</p>
+                                    <p class="text-[10px] text-slate-400 mt-1">Hace 15 min</p>
+                                </div>
+                            </div>
+                            <div class="p-4 flex gap-4">
+                                <div class="size-10 rounded-full bg-soft-grey dark:bg-slate-800 flex items-center justify-center shrink-0">
+                                    <span class="material-symbols-outlined text-muted-blue">person_add</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-navy-deep dark:text-white">Nuevo Ingreso:
+                                        Docente</p>
+                                    <p class="text-xs text-muted-blue mt-0.5">Carlos Ruiz - Dept. Matemáticas.</p>
+                                    <p class="text-[10px] text-slate-400 mt-1">Hace 2 horas</p>
+                                </div>
+                            </div>
+                            <div class="p-4 flex gap-4">
+                                <div class="size-10 rounded-full bg-soft-grey dark:bg-slate-800 flex items-center justify-center shrink-0">
+                                    <span class="material-symbols-outlined text-muted-blue">campaign</span>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-navy-deep dark:text-white">Mantenimiento de
+                                        Servidores</p>
+                                    <p class="text-xs text-muted-blue mt-0.5">Programado para el sábado 22:00.</p>
+                                    <p class="text-[10px] text-slate-400 mt-1">Hace 4 horas</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-primary rounded-xl p-6 text-white overflow-hidden relative group">
+                        <div class="relative z-10">
+                            <h4 class="font-bold text-lg mb-2">Ayuda y Soporte</h4>
+                            <p class="text-white/80 text-sm mb-4">¿Necesitas ayuda con el portal? Nuestro equipo técnico
+                                está disponible 24/7.</p>
+                            <a href="{% url 'contacto' %}"
+                               class="bg-white text-primary text-sm font-bold px-4 py-2 rounded-lg hover:bg-navy-deep hover:text-white transition-all no-underline">
+                                Contactar Soporte
+                            </a>
+                        </div>
+                        <span class="material-symbols-outlined absolute -bottom-4 -right-4 text-white/10 text-[120px] select-none group-hover:rotate-12 transition-transform duration-500">support_agent</span>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+    </main>
+
+    <footer class="bg-navy-deep text-slate-400 py-12 px-4 md:px-10 lg:px-20 mt-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-8">
+                <div>
+                    <div class="flex items-center gap-3 text-white mb-6">
+                        <span class="material-symbols-outlined text-primary">school</span>
+                        <span class="text-xl font-bold">Sistema de Gestión Escolar (SGE)</span>
+                    </div>
+                    <p class="text-sm leading-relaxed max-w-xs">
+                        Comprometidos con la excelencia académica y la innovación digital en la gestión educativa
+                        institucional.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-6">Enlaces Rápidos</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li><a class="hover:text-primary transition-colors" href="{% url 'reglamento' %}">Reglamento
+                            Escolar</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="{% url 'directorio_docente' %}">Directorio
+                            Docente</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="{% url 'terminos' %}">Privacidad</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+                <p>© 2026 Portal Sistema de Gestión Escolar (SGE). Todos los derechos reservados.</p>
+                <div class="flex items-center gap-6">
+                    <a class="hover:text-white transition-colors" href="#">Facebook</a>
+                    <a class="hover:text-white transition-colors" href="#">Twitter</a>
+                    <a class="hover:text-white transition-colors" href="#">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block titulo %} Eliminar Profesor {% endblock %}
+
+{% block main %}
+
+<div class="max-w-2xl mx-auto">
+
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-xs font-medium text-slate-400 mb-6 uppercase tracking-wide">
+        <a class="hover:text-primary" href="{% url 'base' %}">Inicio</a>
+        <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+        <a class="hover:text-primary" href="{% url 'portal_profesores' %}">Profesores</a>
+        <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+        <a class="hover:text-primary" href="{% url 'lista_profesores' %}">Listado</a>
+        <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+        <span class="text-red-400">Eliminar</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="mb-8 flex items-center gap-3">
+        <div class="size-10 rounded-xl bg-red-500 flex items-center justify-center text-white shadow-lg shadow-red-500/20">
+            <span class="material-symbols-outlined">person_remove</span>
+        </div>
+        <div>
+            <h1 class="text-2xl font-black text-slate-900 dark:text-white">Eliminar Profesor</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-sm">Esta acción es permanente y no se puede deshacer.</p>
+        </div>
+    </div>
+
+    <!-- Alerta de advertencia -->
+    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800
+                rounded-2xl p-5 flex items-start gap-4 mb-4">
+        <span class="material-symbols-outlined text-red-500 text-[28px] shrink-0">warning</span>
+        <div>
+            <p class="text-sm font-bold text-red-700 dark:text-red-400">¿Estás seguro de que deseas eliminar este profesor?</p>
+            <p class="text-xs text-red-600 dark:text-red-300 mt-1 leading-relaxed">
+                Se eliminarán permanentemente todos los datos del docente
+                <span class="font-bold">{{ profesor.nombre }} {{ profesor.apellido }}</span>.
+                Esta operación no se puede revertir.
+            </p>
+        </div>
+    </div>
+
+    <!-- Alerta de impacto en cursos  ← EXTRA respecto a eliminar_alumno.html -->
+    {% with total_cursos=profesor.cursos.count %}
+    {% if total_cursos > 0 %}
+    <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800
+                rounded-2xl p-5 flex items-start gap-4 mb-6">
+        <span class="material-symbols-outlined text-amber-500 text-[28px] shrink-0">book_off</span>
+        <div>
+            <p class="text-sm font-bold text-amber-700 dark:text-amber-400">
+                Este profesor tiene {{ total_cursos }} curso{{ total_cursos|pluralize:"s" }} asignado{{ total_cursos|pluralize:"s" }}
+            </p>
+            <p class="text-xs text-amber-600 dark:text-amber-300 mt-1 leading-relaxed">
+                Al eliminarlo, {{ total_cursos|pluralize:"ese curso quedará,esos cursos quedarán" }} sin profesor asignado.
+                Podrás reasignar un docente desde la app de Cursos.
+            </p>
+        </div>
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Card con resumen del profesor a eliminar -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-red-200 dark:border-red-900/50
+                shadow-sm overflow-hidden mb-8">
+
+        <!-- Header de la card -->
+        <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3">
+            <div class="size-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center shrink-0">
+                <span class="text-red-500 text-lg font-black">
+                    {{ profesor.nombre|first|upper }}{{ profesor.apellido|first|upper }}
+                </span>
+            </div>
+            <div>
+                <h2 class="text-base font-bold text-slate-900 dark:text-white">
+                    {{ profesor.nombre }} {{ profesor.apellido }}
+                </h2>
+                <p class="text-xs text-slate-400">{{ profesor.profesion }}</p>
+            </div>
+            <span class="ml-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full
+                         bg-red-100 dark:bg-red-900/30 text-red-500
+                         text-[11px] font-bold uppercase tracking-wider">
+                <span class="size-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                Por eliminar
+            </span>
+        </div>
+
+        <!-- Filas de datos -->
+        <div class="divide-y divide-slate-100 dark:divide-slate-800">
+
+            <!-- RUT -->
+            <div class="px-6 py-4 flex items-center gap-4">
+                <div class="size-9 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-[18px] text-slate-400">badge</span>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">RUT</p>
+                    <p class="text-sm font-mono font-bold text-slate-800 dark:text-slate-200 mt-0.5">
+                        {{ profesor.rut }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Nombre completo -->
+            <div class="px-6 py-4 flex items-center gap-4">
+                <div class="size-9 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-[18px] text-slate-400">person</span>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Nombre Completo</p>
+                    <p class="text-sm font-bold text-slate-800 dark:text-slate-200 mt-0.5">
+                        {{ profesor.nombre }} {{ profesor.apellido }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Profesión  ← FILA EXTRA respecto a eliminar_alumno.html -->
+            <div class="px-6 py-4 flex items-center gap-4">
+                <div class="size-9 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-[18px] text-slate-400">school</span>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Profesión</p>
+                    <p class="text-sm font-bold text-slate-800 dark:text-slate-200 mt-0.5">
+                        {{ profesor.profesion }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Fecha de nacimiento -->
+            <div class="px-6 py-4 flex items-center gap-4">
+                <div class="size-9 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-[18px] text-slate-400">calendar_today</span>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Fecha de Nacimiento</p>
+                    <p class="text-sm font-bold text-slate-800 dark:text-slate-200 mt-0.5">
+                        {{ profesor.fecha_nacimiento|date:"d/m/Y" }}
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Formulario de confirmación -->
+    <form method="post">
+        {% csrf_token %}
+        <div class="flex flex-col sm:flex-row gap-3">
+            <button type="submit"
+                    class="flex-1 flex items-center justify-center gap-2
+                           bg-red-500 hover:bg-red-400 text-white
+                           font-bold py-3 px-6 rounded-xl shadow-lg shadow-red-500/20 transition-all">
+                <span class="material-symbols-outlined text-[20px]">delete_forever</span>
+                Sí, eliminar definitivamente
+            </button>
+            <a href="{% url 'detalle_profesor' profesor.rut %}"
+               class="flex items-center justify-center gap-2
+                      bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700
+                      text-slate-700 dark:text-slate-300
+                      font-bold py-3 px-6 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                Cancelar
+            </a>
+        </div>
+    </form>
+
+</div>
+
+{% endblock %}

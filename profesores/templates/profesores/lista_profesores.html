@@ -1,24 +1,221 @@
-{% extends "index.html" %}
-{% load static %}
+{% extends "base.html" %}
 
-{% block titulo %}Portal de Profesores{% endblock %}
+{% block titulo %}Listado de Profesores{% endblock %}
 
-{% block contenido %}
-    <h1>Liceo Digital - Portal de Profesores</h1>
-    <p>Entraste a una App (Módulo) de tu Liceo Digital</p>
-    <h2>Listado de Profesores</h2>
-    <p>Acá va el listado de cursos:</p>
+{% block main %}
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+            <!-- Breadcrumb -->
+            <nav class="flex items-center gap-2 text-xs font-medium text-slate-400 mb-2 uppercase tracking-wide">
+                <a class="hover:text-primary" href="{% url 'base' %}">Inicio</a>
+                <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+                <span class="text-slate-600 dark:text-slate-300">Profesores</span>
+            </nav>
+            <div class="flex items-center gap-3">
+                <div class="size-10 rounded-xl bg-indigo-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+                    <span class="material-symbols-outlined">groups</span>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black text-slate-900 dark:text-white">Listado de Profesores</h1>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">
+                        {% if lista_profesores %}
+                            {{ lista_profesores|length }} profesor{{ lista_profesores|length|pluralize:"es" }}registrado
+                            {{ lista_profesores|length|pluralize:"s" }}
+                        {% else %}
+                            Sin registros aún
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <a href="{% url 'agregar_profesor' %}"
+           class="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-500/90 text-white
+              font-bold py-2.5 px-5 rounded-xl shadow-lg shadow-indigo-500/20 transition-all self-start sm:self-auto">
+            <span class="material-symbols-outlined text-[20px]">person_add</span>
+            Nuevo Profesor
+        </a>
+    </div>
 
     {% if lista_profesores %}
-        <p>¡Excelente! Tenemos los siguientes profesores inscritos</p>
-        <ol>
-            {% for profesor in lista_profesores %}
-                <li>{{ profesor }}</li>
-            {% endfor %}
-        </ol>
+
+        <!-- Tabla -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+
+            <!-- Buscador -->
+            <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3">
+                <span class="material-symbols-outlined text-slate-400">search</span>
+                <input type="text"
+                       id="buscador"
+                       placeholder="Buscar por nombre, apellido, RUT o profesión..."
+                       onkeyup="filtrarTabla()"
+                       class="w-full bg-transparent text-sm text-slate-700 dark:text-slate-300
+                          placeholder-slate-400 focus:outline-none">
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-100 dark:divide-slate-800" id="tablaProfesores">
+                    <thead class="bg-slate-50 dark:bg-slate-800/50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">RUT
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Nombre
+                            Completo
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            Profesión
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Fecha
+                            Nacimiento
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            Cursos
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">
+                            Acciones
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                    {% for profesor in lista_profesores %}
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+
+                            <!-- RUT -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1.5 text-sm font-mono font-semibold text-slate-700 dark:text-slate-300">
+                                <span class="material-symbols-outlined text-[15px] text-indigo-500">badge</span>
+                                {{ profesor.rut }}
+                            </span>
+                            </td>
+
+                            <!-- Nombre completo -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center gap-3">
+                                    <div class="size-9 rounded-full bg-indigo-500/10 flex items-center justify-center shrink-0">
+                                    <span class="text-indigo-500 text-sm font-bold">
+                                        {{ profesor.nombre|first|upper }}{{ profesor.apellido|first|upper }}
+                                    </span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-slate-900 dark:text-white">
+                                            {{ profesor.nombre }} {{ profesor.apellido }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- Profesión -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-300">
+                                <span class="material-symbols-outlined text-[15px] text-slate-400">school</span>
+                                {{ profesor.profesion }}
+                            </span>
+                            </td>
+
+                            <!-- Fecha de nacimiento -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-[15px]">calendar_today</span>
+                                {{ profesor.fecha_nacimiento|date:"d/m/Y" }}
+                            </span>
+                            </td>
+
+                            <!-- Cursos asignados -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% with total=profesor.cursos.count %}
+                                    {% if total > 0 %}
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full
+                                                 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400
+                                                 text-[11px] font-bold uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[13px]">book</span>
+                                        {{ total }} curso{{ total|pluralize:"s" }}
+                                    </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold
+                                                 bg-slate-100 dark:bg-slate-800 text-slate-400 uppercase tracking-wider">
+                                        Sin cursos
+                                    </span>
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
+
+                            <!-- Acciones -->
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center gap-2">
+
+                                    <!-- Ver detalle -->
+                                    <a href="{% url 'detalle_profesor' profesor.rut %}"
+                                       title="Ver detalle"
+                                       class="p-1.5 rounded-lg text-slate-400 hover:text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all">
+                                        <span class="material-symbols-outlined text-[18px]">visibility</span>
+                                    </a>
+
+                                    <!-- Editar -->
+                                    <a href="{% url 'editar_profesor' profesor.rut %}"
+                                       title="Editar"
+                                       class="p-1.5 rounded-lg text-slate-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-all">
+                                        <span class="material-symbols-outlined text-[18px]">edit</span>
+                                    </a>
+
+                                    <!-- Eliminar -->
+                                    <a href="{% url 'eliminar_profesor' profesor.rut %}"
+                                       title="Eliminar"
+                                       class="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all">
+                                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                                    </a>
+
+                                </div>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer de tabla -->
+            <div class="px-6 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20">
+                <p class="text-xs text-slate-400">
+                    Total: <span
+                        class="font-bold text-slate-600 dark:text-slate-300">{{ lista_profesores|length }}</span>
+                    profesor{{ lista_profesores|length|pluralize:"es" }}
+                </p>
+            </div>
+
+        </div>
+
     {% else %}
-        <p><strong>AVISO:</strong> Actualmente no hay profesores para listar</p>
+
+        <!-- Estado vacío -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-16 flex flex-col items-center text-center gap-4">
+            <div class="size-20 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                <span class="material-symbols-outlined text-slate-400 text-4xl">person_off</span>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-slate-700 dark:text-slate-300">No hay profesores registrados</h3>
+                <p class="text-slate-400 text-sm mt-1">Comienza agregando el primer docente al sistema.</p>
+            </div>
+            <a href="{% url 'agregar_profesor' %}"
+               class="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-500/90 text-white
+                  font-bold py-2.5 px-6 rounded-xl shadow-lg shadow-indigo-500/20 transition-all mt-2">
+                <span class="material-symbols-outlined text-[20px]">person_add</span>
+                Agregar Primer Profesor
+            </a>
+        </div>
+
     {% endif %}
 
-    <a href="{% url 'inicio_global' %}">Volver al Portal Central</a>
+    <!-- Script buscador -->
+    <script>
+        function filtrarTabla() {
+            const input = document.getElementById('buscador').value.toLowerCase();
+            const filas = document.querySelectorAll('#tablaProfesores tbody tr');
+            filas.forEach(fila => {
+                const texto = fila.textContent.toLowerCase();
+                fila.style.display = texto.includes(input) ? '' : 'none';
+            });
+        }
+    </script>
+
 {% endblock %}

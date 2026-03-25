@@ -1,19 +1,31 @@
 from django.db import models
+from profesores.models import Profesor
+from alumnos.models import Alumno
 
 class Curso(models.Model):
+    codigo = models.AutoField(primary_key=True, verbose_name="Código")
+    nombre = models.CharField(max_length=150, verbose_name="Nombre del Curso")
+    profesor = models.ForeignKey(
+        Profesor,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='cursos',
+        verbose_name="Profesor"
+    )
+    alumnos = models.ManyToManyField(
+        Alumno,
+        blank=True,
+        related_name='cursos',
+        verbose_name="Alumnos"
+    )
 
-    nombre = models.CharField(max_length=100, verbose_name="Nombre")
-    descripcion = models.TextField()
+    class Meta:
+        verbose_name = "Curso"
+        verbose_name_plural = "Cursos"
+        ordering = ['nombre']
 
     def __str__(self):
-        return self.nombre
+        return f"[{self.codigo}] {self.nombre}"
 
-class NovedadCurso(models.Model):
-    #Acá se crea una FK que apunta automaticamente a la PK de la otra tabla modelo.
-
-    curso = models.ForeignKey(Curso, on_delete=models.CASCADE)
-    detalle = models.TextField(verbose_name="Detalle")
-    fecha = models.DateField(auto_now_add=True, verbose_name="Fecha")
-
-    def __str__(self):
-        return f"Anotación de {self.curso} el {self.detalle}"
+    def total_alumnos(self):
+        return self.alumnos.count()

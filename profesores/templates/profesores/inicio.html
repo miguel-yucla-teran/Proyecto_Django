@@ -1,6 +1,7 @@
+<!-- DTL - Django Templates Language (Python minimizada) -->
 {% extends 'base.html' %}
 
-{% block titulo %} Portal de Alumnos {% endblock %}
+{% block titulo %} Portal de Profesores {% endblock %}
 
 {% block main %}
 
@@ -8,22 +9,22 @@
 <nav class="flex items-center gap-2 text-xs font-medium text-slate-400 mb-6 uppercase tracking-wide">
     <a class="hover:text-primary" href="{% url 'base' %}">Inicio</a>
     <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-    <span class="text-slate-600 dark:text-slate-300">Alumnos</span>
+    <span class="text-slate-600 dark:text-slate-300">Profesores</span>
 </nav>
 
 <!-- Header del portal -->
 <div class="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div class="flex items-center gap-4">
-        <div class="size-14 rounded-2xl bg-primary flex items-center justify-center text-white shadow-xl shadow-primary/20">
-            <span class="material-symbols-outlined text-3xl">school</span>
+        <div class="size-14 rounded-2xl bg-indigo-500 flex items-center justify-center text-white shadow-xl shadow-indigo-500/20">
+            <span class="material-symbols-outlined text-3xl">person_pin</span>
         </div>
         <div>
-            <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Portal de Alumnos</h1>
-            <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Gestión de estudiantes del sistema SGE</p>
+            <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Portal de Profesores</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Gestión de docentes del sistema SGE</p>
         </div>
     </div>
-    <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider self-start sm:self-auto">
-        <span class="size-1.5 rounded-full bg-primary animate-pulse"></span>
+    <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 text-indigo-500 text-xs font-bold uppercase tracking-wider self-start sm:self-auto">
+        <span class="size-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
         Módulo Activo
     </span>
 </div>
@@ -31,33 +32,33 @@
 <!-- Tarjetas de navegación -->
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
 
-    <!-- Listado de Alumnos -->
-    <a href="{% url 'lista_alumnos' %}" class="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800
-              hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1
+    <!-- Listado de Profesores -->
+    <a href="{% url 'lista_profesores' %}" class="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800
+              hover:border-indigo-400/50 hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1
               transition-all duration-300 p-6 flex flex-col gap-4">
         <div class="flex items-start justify-between">
-            <div class="size-12 rounded-xl bg-primary/10 flex items-center justify-center
-                        group-hover:bg-primary transition-colors duration-300">
-                <span class="material-symbols-outlined text-primary group-hover:text-white text-2xl transition-colors duration-300">group</span>
+            <div class="size-12 rounded-xl bg-indigo-500/10 flex items-center justify-center
+                        group-hover:bg-indigo-500 transition-colors duration-300">
+                <span class="material-symbols-outlined text-indigo-500 group-hover:text-white text-2xl transition-colors duration-300">groups</span>
             </div>
-            <span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors duration-300">arrow_forward</span>
+            <span class="material-symbols-outlined text-slate-300 group-hover:text-indigo-500 transition-colors duration-300">arrow_forward</span>
         </div>
         <div>
-            <h2 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
-                Listado de Alumnos
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-indigo-500 transition-colors">
+                Listado de Profesores
             </h2>
             <p class="text-slate-500 dark:text-slate-400 text-sm mt-1 leading-relaxed">
-                Consulta, busca y gestiona todos los estudiantes registrados en el sistema.
+                Consulta, busca y gestiona todos los docentes registrados en el sistema.
             </p>
         </div>
-        <div class="flex items-center gap-2 text-xs font-semibold text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+        <div class="flex items-center gap-2 text-xs font-semibold text-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity">
             <span>Ver listado completo</span>
             <span class="material-symbols-outlined text-[14px]">east</span>
         </div>
     </a>
 
-    <!-- Agregar Alumno -->
-    <a href="{% url 'agregar_alumno' %}" class="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800
+    <!-- Agregar Profesor -->
+    <a href="{% url 'agregar_profesor' %}" class="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800
               hover:border-emerald-400/50 hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1
               transition-all duration-300 p-6 flex flex-col gap-4">
         <div class="flex items-start justify-between">
@@ -69,10 +70,10 @@
         </div>
         <div>
             <h2 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">
-                Agregar Alumno
+                Agregar Profesor
             </h2>
             <p class="text-slate-500 dark:text-slate-400 text-sm mt-1 leading-relaxed">
-                Registra un nuevo estudiante completando el formulario de inscripción.
+                Registra un nuevo docente completando el formulario de inscripción.
             </p>
         </div>
         <div class="flex items-center gap-2 text-xs font-semibold text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -90,19 +91,26 @@
         Accesos rápidos del módulo
     </h3>
     <div class="flex flex-wrap gap-3">
-        <a href="{% url 'lista_alumnos' %}"
+        <a href="{% url 'lista_profesores' %}"
            class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800
-                  hover:bg-primary hover:text-white text-slate-600 dark:text-slate-400
+                  hover:bg-indigo-500 hover:text-white text-slate-600 dark:text-slate-400
                   text-sm font-medium transition-all">
             <span class="material-symbols-outlined text-[16px]">format_list_bulleted</span>
-            Ver todos los alumnos
+            Ver todos los profesores
         </a>
-        <a href="{% url 'agregar_alumno' %}"
+        <a href="{% url 'agregar_profesor' %}"
            class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800
                   hover:bg-emerald-500 hover:text-white text-slate-600 dark:text-slate-400
                   text-sm font-medium transition-all">
             <span class="material-symbols-outlined text-[16px]">add_circle</span>
             Nuevo registro
+        </a>
+        <a href="{% url 'portal_cursos' %}"
+           class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800
+                  hover:bg-orange-500 hover:text-white text-slate-600 dark:text-slate-400
+                  text-sm font-medium transition-all">
+            <span class="material-symbols-outlined text-[16px]">book</span>
+            Ver cursos
         </a>
         <a href="{% url 'base' %}"
            class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800

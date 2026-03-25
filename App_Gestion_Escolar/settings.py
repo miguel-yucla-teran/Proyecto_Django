@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,17 +21,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-&#l4icsi2!!6f7nt0o!ov*ori7hb5zesfegwm%f$xr-%qf(t(-"
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-#$(rf3txl^fu8m+$qcna__2itn!50c^d03809*rgrpqc*h^#0=')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['miguelyucla.alwaysdata.net', 'localhost', '127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "App_Gestion_Escolar.apps.AppGestionEscolarConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "App_Gestion_Escolar.middleware.ContadorAccionesMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -76,13 +79,24 @@ WSGI_APPLICATION = "App_Gestion_Escolar.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# ─── Base de datos ─────────────────────────────────────────────────────────────
+# En desarrollo: .env apunta al contenedor Docker (root/root/127.0.0.1)
+# En producción: AlwaysData inyecta las variables reales del servidor
+# No se necesita ningún if/else → python-decouple hace la detección automática.
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME':     config('DB_NAME',     default='gestionescolar_db'),
+        'USER':     config('DB_USER',     default='root'),
+        'PASSWORD': config('DB_PASSWORD', default='root'),
+        'HOST':     config('DB_HOST',     default='127.0.0.1'),
+        'PORT':     config('DB_PORT',     default='3306'),
+        'OPTIONS': {
+            'charset': 'utf8mb4',   # soporte completo de Unicode (emojis, etc.)
+        },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -114,12 +128,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
-
-STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / 'static']
 
 #CONFIGURAR LA AUTENTICACION
 
@@ -134,3 +144,10 @@ LOGOUT_REDIRECT_URL = '/login/'
 #La nueva ubicación del archivo login.html (por defecto debería estar en una carpeta app/registro/login.html
 
 LOGIN_URL = 'login'
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/6.0/howto/static-files/
+
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+

@@ -1,6 +1,32 @@
+# Secretos — nunca subir
+.env
+
+# Entorno virtual
+.venv/
 venv/
-.idea/
+env/
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Django
 db.sqlite3
+staticfiles/
+media/
+
+# PyCharm / IntelliJ (ya tiene su propio .gitignore interno, pero por seguridad)
+.idea/
+
+# Distribución / empaquetado
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Sistema operativo
 .DS_Store
+Thumbs.db

@@ -1,0 +1,125 @@
+<!-- DTL - Django Templates Language (Python minimizada) -->
+{% extends 'base.html' %}
+
+{% block titulo %} Portal de Cursos {% endblock %}
+
+{% block main %}
+
+<!-- Breadcrumb -->
+<nav class="flex items-center gap-2 text-xs font-medium text-slate-400 mb-6 uppercase tracking-wide">
+    <a class="hover:text-primary" href="{% url 'base' %}">Inicio</a>
+    <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+    <span class="text-slate-600 dark:text-slate-300">Cursos</span>
+</nav>
+
+<!-- Header del portal -->
+<div class="mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div class="flex items-center gap-4">
+        <div class="size-14 rounded-2xl bg-orange-500 flex items-center justify-center text-white shadow-xl shadow-orange-500/20">
+            <span class="material-symbols-outlined text-3xl">book</span>
+        </div>
+        <div>
+            <h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Portal de Cursos</h1>
+            <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">Gestión de cursos del sistema SGE</p>
+        </div>
+    </div>
+    <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 text-orange-500 text-xs font-bold uppercase tracking-wider self-start sm:self-auto">
+        <span class="size-1.5 rounded-full bg-orange-500 animate-pulse"></span>
+        Módulo Activo
+    </span>
+</div>
+
+<!-- Tarjetas de navegación -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
+
+    <!-- Listado de Cursos -->
+    <a href="{% url 'lista_cursos' %}" class="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800
+              hover:border-orange-400/50 hover:shadow-xl hover:shadow-orange-500/10 hover:-translate-y-1
+              transition-all duration-300 p-6 flex flex-col gap-4">
+        <div class="flex items-start justify-between">
+            <div class="size-12 rounded-xl bg-orange-500/10 flex items-center justify-center
+                        group-hover:bg-orange-500 transition-colors duration-300">
+                <span class="material-symbols-outlined text-orange-500 group-hover:text-white text-2xl transition-colors duration-300">library_books</span>
+            </div>
+            <span class="material-symbols-outlined text-slate-300 group-hover:text-orange-500 transition-colors duration-300">arrow_forward</span>
+        </div>
+        <div>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-orange-500 transition-colors">
+                Listado de Cursos
+            </h2>
+            <p class="text-slate-500 dark:text-slate-400 text-sm mt-1 leading-relaxed">
+                Consulta, busca y gestiona todos los cursos registrados en el sistema.
+            </p>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-semibold text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity">
+            <span>Ver listado completo</span>
+            <span class="material-symbols-outlined text-[14px]">east</span>
+        </div>
+    </a>
+
+    <!-- Agregar Curso -->
+    <a href="{% url 'agregar_curso' %}" class="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800
+              hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1
+              transition-all duration-300 p-6 flex flex-col gap-4">
+        <div class="flex items-start justify-between">
+            <div class="size-12 rounded-xl bg-primary/10 flex items-center justify-center
+                        group-hover:bg-primary transition-colors duration-300">
+                <span class="material-symbols-outlined text-primary group-hover:text-white text-2xl transition-colors duration-300">add_circle</span>
+            </div>
+            <span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors duration-300">arrow_forward</span>
+        </div>
+        <div>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                Agregar Curso
+            </h2>
+            <p class="text-slate-500 dark:text-slate-400 text-sm mt-1 leading-relaxed">
+                Registra un nuevo curso asignando profesor y alumnos desde el formulario.
+            </p>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-semibold text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+            <span>Ir al formulario</span>
+            <span class="material-symbols-outlined text-[14px]">east</span>
+        </div>
+    </a>
+
+</div>
+
+<!-- Accesos rápidos -->
+<div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
+    <h3 class="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-[16px]">info</span>
+        Accesos rápidos del módulo
+    </h3>
+    <div class="flex flex-wrap gap-3">
+        <a href="{% url 'lista_cursos' %}"
+           class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800
+                  hover:bg-orange-500 hover:text-white text-slate-600 dark:text-slate-400
+                  text-sm font-medium transition-all">
+            <span class="material-symbols-outlined text-[16px]">format_list_bulleted</span>
+            Ver todos los cursos
+        </a>
+        <a href="{% url 'agregar_curso' %}"
+           class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800
+                  hover:bg-primary hover:text-white text-slate-600 dark:text-slate-400
+                  text-sm font-medium transition-all">
+            <span class="material-symbols-outlined text-[16px]">add_circle</span>
+            Nuevo curso
+        </a>
+        <a href="{% url 'portal_profesores' %}"
+           class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800
+                  hover:bg-indigo-500 hover:text-white text-slate-600 dark:text-slate-400
+                  text-sm font-medium transition-all">
+            <span class="material-symbols-outlined text-[16px]">person</span>
+            Ver profesores
+        </a>
+        <a href="{% url 'base' %}"
+           class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800
+                  hover:bg-slate-600 hover:text-white text-slate-600 dark:text-slate-400
+                  text-sm font-medium transition-all">
+            <span class="material-symbols-outlined text-[16px]">home</span>
+            Volver al inicio
+        </a>
+    </div>
+</div>
+
+{% endblock %}

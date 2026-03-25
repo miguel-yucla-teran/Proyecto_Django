@@ -1,0 +1,17 @@
+<!-- DTL - Django Templates Language (Python minimizada) -->
+{% extends 'base.html' %}
+
+{% block titulo %} Alumnos Registrados Exitósamente {% endblock %}
+
+{% block main %}
+
+    <h2> Alumnos Registrado Exitosamente  </h2>
+
+    <ol>
+        <li> Rut : {{ rut }} </li>
+        <li> Nombre : {{ nombre }} </li>
+        <li> Apellido : {{ apellido }} </li>
+        <li> Email : {{ email }} </li>
+    </ol>
+
+{% endblock %}

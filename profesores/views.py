@@ -1,47 +1,78 @@
-from django.shortcuts import render
-from .import forms
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from profesores.models import Profesor
+from profesores.forms import ProfesorForm
+from django.contrib import messages
 
-# Create your views here.
 @login_required
-def portal_profesores(request):
-    return render(request, "profesores/profesores.html")
+def inicio(request):
+    return render(request, "profesores/inicio.html")
 
 @login_required
 def lista_profesores(request):
-    profesores = ["Profesor Rosa", "Profesor Jirafales", "Profesor Ramon", "Profesor Longaniza"]
+    profesores = Profesor.objects.all()
     contexto = {'lista_profesores': profesores
                 }
     return render(request, "profesores/lista_profesores.html", contexto)
 
 @login_required
-def nuevo_profesor(request):
-    if request.method == 'GET':
-        #Acá llegaria cuando la persona apretó el boton de la barra de navegación, buscando el link
-        form = forms.ProfesorForm()
-    else:
-        #Acá llegaría cuando la persona apretó el boton del formulario 'Crear Alumno'
-        form = forms.ProfesorForm(request.POST)
+def agregar_profesor(request):
+    if request.method == 'POST':
+        form = ProfesorForm(request.POST)
         if form.is_valid():
-            #Acá extraemos los datos de la solicitud Http (request) y los asignamos variables
-            nombre = form.cleaned_data['nombre']
-            apellido = form.cleaned_data['apellido']
-            especialidad = form.cleaned_data['especialidad']
-            correo_electronico = form.cleaned_data['correo_electronico']
-            contexto_post = {'nombre': nombre,
-                             'apellido': apellido,
-                             'especialidad': especialidad,
-                             'correo_electronico': correo_electronico,
-                             }
+            profesor = form.save()
+            # ── MESSAGE ──────────────────────────────────────────────────────
+            messages.success(
+                request,
+                f'El profesor {profesor.nombre} {profesor.apellido} fue registrado correctamente.'
+            )
+            # ─────────────────────────────────────────────────────────────────
+            return redirect('lista_profesores')
+    else:
+        form = ProfesorForm()
+    contexto = {'form': form}
+    return render(request, "profesores/agregar_profesor.html", contexto)
+
+@login_required
+def detalle_profesor(request, rut):
+    profesor = get_object_or_404(Profesor, rut=rut)
+    contexto = {'profesor': profesor}
+    return render(request, 'profesores/detalle_profesor.html', contexto)
 
 
-            #Acá yo debería tomar las variables y guardarlas en MySql(persistir los datos)
+@login_required
+def editar_profesor(request, rut):
+    profesor = get_object_or_404(Profesor, rut=rut)
+    if request.method == 'POST':
+        form = ProfesorForm(request.POST, instance=profesor)
+        if form.is_valid():
+            profesor = form.save()
+            # ── MESSAGE ──────────────────────────────────────────────────────
+            messages.success(
+                request,
+                f'Los datos del profesor {profesor.nombre} {profesor.apellido} fueron actualizados correctamente.'
+            )
+            # ─────────────────────────────────────────────────────────────────
+            return redirect('lista_profesores')
+    else:
+        form = ProfesorForm(instance=profesor)
+    contexto = {'form': form, 'profesor': profesor}
+    return render(request, 'profesores/editar_profesor.html', contexto)
 
-            #Debería enviar un mensaje de confirmación "Nuevo alumno creado con éxito"
-            return render(request, "profesores/registro_exito.html", contexto_post)
 
-    contexto = {
-                'form': form
-                }
-
-    return render(request, "profesores/registro_profesor.html", contexto)
+@login_required
+def eliminar_profesor(request, rut):
+    profesor = get_object_or_404(Profesor, rut=rut)
+    if request.method == 'POST':
+        # ── MESSAGE ──────────────────────────────────────────────────────────
+        # Igual que en alumnos: guardamos el nombre ANTES de .delete()
+        nombre_completo = f'{profesor.nombre} {profesor.apellido}'
+        profesor.delete()
+        messages.success(
+            request,
+            f'El profesor {nombre_completo} fue eliminado del sistema.'
+        )
+        # ─────────────────────────────────────────────────────────────────────
+        return redirect('lista_profesores')
+    contexto = {'profesor': profesor}
+    return render(request, 'profesores/eliminar_profesor.html', contexto)

@@ -1,48 +1,78 @@
-from django.shortcuts import render
-from .import forms
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from cursos.models import Curso
+from cursos.forms import CursoForm
 
-# Create your views here.
 @login_required
-def portal_cursos(request):
-    return render(request, "cursos/cursos.html")
+def inicio(request):
+    return render(request, "cursos/inicio.html")
 
 @login_required
 def lista_cursos(request):
-    cursos = ["1A", "1B", "1C", "1D"]
+    cursos = Curso.objects.select_related('profesor').all()
     contexto = {'lista_cursos': cursos
                 }
     return render(request, "cursos/lista_cursos.html", contexto)
 @login_required
-def nuevo_curso(request):
-    if request.method == 'GET':
-        #Acá llegaria cuando la persona apretó el boton de la barra de navegación, buscando el link
-        form = forms.CursoForm()
-    else:
-        #Acá llegaría cuando la persona apretó el boton del formulario 'Crear Alumno'
-        form = forms.CursoForm(request.POST)
+def agregar_curso(request):
+    if request.method == 'POST':
+        form = CursoForm(request.POST)
         if form.is_valid():
-            #Acá extraemos los datos de la solicitud Http (request) y los asignamos variables
-            nombre_curso = form.cleaned_data['nombre_curso']
-            codigo = form.cleaned_data['codigo']
-            descripcion = form.cleaned_data['descripcion']
-            profesor = form.cleaned_data['profesor']
+            curso =form.save()
+            # ── MESSAGE ──────────────────────────────────────────────────────
+            # Para cursos usamos el nombre del curso, no una persona.
+            messages.success(
+                request,
+                f'El curso "{curso.nombre}" fue creado correctamente.'
+            )
+            # ─────────────────────────────────────────────────────────────────
+            return redirect('lista_cursos')
+    else:
+        form = CursoForm()
+    contexto = {'form': form}
+    return render(request, 'cursos/agregar_curso.html', contexto)
 
-            contexto_post = {'nombre_curso': nombre_curso,
-                             'codigo': codigo,
-                             'descripcion': descripcion,
-                             'profesor': profesor,
-                             }
+@login_required
+def detalle_curso(request, codigo):
+    curso = get_object_or_404(Curso, codigo=codigo)
+    contexto = {'curso': curso}
+    return render(request, 'cursos/detalle_curso.html', contexto)
 
 
-            #Acá yo debería tomar las variables y guardarlas en MySql(persistir los datos)
+@login_required
+def editar_curso(request, codigo):
+    curso = get_object_or_404(Curso, codigo=codigo)
+    if request.method == 'POST':
+        form = CursoForm(request.POST, instance=curso)
+        if form.is_valid():
+            curso = form.save()
+            # ── MESSAGE ──────────────────────────────────────────────────────
+            messages.success(
+                request,
+                f'El curso "{curso.nombre}" fue actualizado correctamente.'
+            )
+            # ─────────────────────────────────────────────────────────────────
+            return redirect('lista_cursos')
+    else:
+        form = CursoForm(instance=curso)
+    contexto = {'form': form, 'curso': curso}
+    return render(request, 'cursos/editar_curso.html', contexto)
 
-            #Debería enviar un mensaje de confirmación "Nuevo alumno creado con éxito"
-            return render(request, "cursos/registro_exito.html", contexto_post)
 
-    contexto = {
-                'form': form
-                }
-
-    return render(request, "cursos/registro_curso.html", contexto)
-
+@login_required
+def eliminar_curso(request, codigo):
+    curso = get_object_or_404(Curso, codigo=codigo)
+    if request.method == 'POST':
+        # ── MESSAGE ──────────────────────────────────────────────────────────
+        # Guardamos el nombre ANTES de .delete() — mismo patrón que alumnos/profesores.
+        nombre_curso = curso.nombre
+        curso.delete()
+        messages.success(
+            request,
+            f'🗑El curso "{nombre_curso}" fue eliminado del sistema.'
+        )
+        # ─────────────────────────────────────────────────────────────────────
+        return redirect('lista_cursos')
+    contexto = {'curso': curso}
+    return render(request, 'cursos/eliminar_curso.html', contexto)
