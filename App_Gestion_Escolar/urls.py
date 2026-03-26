@@ -42,3 +42,7 @@ urlpatterns = [
     path('directorio_docente/', views.directorio_docente, name="directorio_docente"),
     path('perfil/', views.perfil_usuario, name='perfil_usuario'),
 ]
+
+# Configuración de errores
+handler404 = 'App_Gestion_Escolar.views.error_404'
+handler500 = 'App_Gestion_Escolar.views.error_500'

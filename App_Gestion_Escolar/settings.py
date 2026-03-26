@@ -89,7 +89,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME':     config('DB_NAME',     default='gestionescolar_db'),
         'USER':     config('DB_USER',     default='root'),
-        'PASSWORD': config('DB_PASSWORD', default='root'),
+        'PASSWORD': config('DB_PASSWORD', default=''),
         'HOST':     config('DB_HOST',     default='127.0.0.1'),
         'PORT':     config('DB_PORT',     default='3306'),
         'OPTIONS': {
@@ -133,17 +133,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #CONFIGURAR LA AUTENTICACION
 
-#GPS del éxito: Hacia donde llevará la App alusuario logueado exitosamente
-
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
-
-#GPS en caso de fracaso: Hacia donde llevará la App al usuario que no se logueó exitosamente
-
 LOGOUT_REDIRECT_URL = '/login/'
 
-#La nueva ubicación del archivo login.html (por defecto debería estar en una carpeta app/registro/login.html
-
-LOGIN_URL = 'login'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
